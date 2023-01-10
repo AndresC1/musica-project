@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Genero;
 use App\Http\Requests\StoreGeneroRequest;
 use App\Http\Requests\UpdateGeneroRequest;
+use Exception;
+use stdClass;
 
 class GeneroController extends Controller
 {
@@ -82,5 +84,21 @@ class GeneroController extends Controller
     public function destroy(Genero $genero)
     {
         //
+    }
+
+    public function IndexAPI(){
+        try {
+            $generos = array();
+            Foreach(Genero::all() as $element){
+                $genero = new stdClass;
+                $genero->id = $element->id;
+                $genero->nombre = $element->nombre;
+                $genero->imagen = $element->imagen;
+                array_push($generos, $genero);
+            }
+            return response($generos, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
     }
 }
