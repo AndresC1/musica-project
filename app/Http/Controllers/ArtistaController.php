@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
+use Exception;
+use stdClass;
 
 class ArtistaController extends Controller
 {
@@ -82,5 +84,20 @@ class ArtistaController extends Controller
     public function destroy(Artista $artista)
     {
         //
+    }
+    public function IndexAPI(){
+        try {
+            $artistas = array();
+            Foreach(Artista::all() as $element){
+                $artista = new stdClass;
+                $artista->id = $element->id;
+                $artista->nombre = $element->nombre;
+                $artista->imagen = $element->imagen;
+                array_push($artistas, $artista);
+            }
+            return response($artistas, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
     }
 }
