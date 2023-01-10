@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Artista extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['nombre', 'imagen'];
+
+    function albumes(){
+        return $this->hasMany(Album::class, 'IdArtista');
+    }
+
+    function canciones(){
+        return $this->hasMany(Cancion::class, 'IdArtistas');
+    }
 }
