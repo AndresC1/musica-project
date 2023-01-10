@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
     <nav class="dark:bg-black bg-white w-2/12 min-h-screen pt-4 h-auto dark:text-[#a7a7a7] border-r-[1px] dark:border-none">
         <div class="flex justify-center items-center mb-4">
             <img class="w-4 h-auto" src={{ asset('storage/svg/Oscuro.svg') }} alt="Modo Oscuro">
-            <button id="btnMode" class="bg-white w-14 h-auto rounded-full border-[1px] mx-3 bg-white border-gray-500 dark:bg-[#30343F] flex transition-all justify-end">
+            <button id="btnMode" class="bg-white w-14 h-auto rounded-full border-[1px] mx-3 bg-white border-gray-500 dark:border-none dark:bg-[#30343F] flex transition-all justify-end">
                 <div class="dark:bg-[#121212] bg-green-600 rounded-full w-5 h-5 m-1 transition-all"></div>
             </button>
             <img class="w-5 h-auto" src={{ asset('storage/svg/Claro.svg') }} alt="Modo Claro">
