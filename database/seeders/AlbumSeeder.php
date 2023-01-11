@@ -20,22 +20,22 @@ class AlbumSeeder extends Seeder
         DB::table('albums')->truncate();
         DB::table('albums')->insert([
             [
-                'nombre' => 'Album_1',
-                'imagen' => 'Album_1.jpg',
+                'nombre' => 'Un verano sin ti',
+                'imagen' => 'UnVeranoSinTi.jpg',
                 'IdArtista' => 1,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Album_2',
-                'imagen' => 'Album_2.jpg',
+                'nombre' => 'Legendary',
+                'imagen' => 'Legendary.jpg',
                 'IdArtista' => 2,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Album_3',
-                'imagen' => 'Album_3.jpg',
+                'nombre' => 'El sistema',
+                'imagen' => 'ElSistema.jpg',
                 'IdArtista' => 3,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
