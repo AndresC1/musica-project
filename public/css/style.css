@@ -1,0 +1,9 @@
+#contenedor::-webkit-scrollbar{
+    width: 0rem;
+}
+#contenedor::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+#contenedor::-webkit-scrollbar-thumb{
+    background-color: transparent;
+}
