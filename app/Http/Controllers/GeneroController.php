@@ -17,7 +17,7 @@ class GeneroController extends Controller
      */
     public function index()
     {
-        //
+        return view('Genero.lista')->with('Generos', Genero::all());
     }
 
     /**
@@ -27,7 +27,7 @@ class GeneroController extends Controller
      */
     public function create()
     {
-        //
+        return view('Genero.create');
     }
 
     /**
@@ -38,7 +38,8 @@ class GeneroController extends Controller
      */
     public function store(StoreGeneroRequest $request)
     {
-        //
+        Genero::created($request->all());
+        return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
     }
 
     /**
@@ -49,7 +50,7 @@ class GeneroController extends Controller
      */
     public function show(Genero $genero)
     {
-        //
+        return view('Genero.show')->with('dato', $genero);
     }
 
     /**
@@ -60,7 +61,7 @@ class GeneroController extends Controller
      */
     public function edit(Genero $genero)
     {
-        //
+        return view('Genero.editar')->with('dato', $genero);
     }
 
     /**
@@ -72,7 +73,8 @@ class GeneroController extends Controller
      */
     public function update(UpdateGeneroRequest $request, Genero $genero)
     {
-        //
+        $genero->update($request->all());
+        return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
     }
 
     /**
@@ -83,7 +85,8 @@ class GeneroController extends Controller
      */
     public function destroy(Genero $genero)
     {
-        //
+        $genero->delete();
+        return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
     }
     public function ShowAPI(Genero $genero){
         try {
