@@ -16,6 +16,6 @@ class Artista extends Model
     }
 
     function canciones(){
-        return $this->belongsToMany(Cancion::class, 'IdArtistas');
+        return $this->belongsToMany(cancion_artista::class, 'IdArtista');
     }
 }
