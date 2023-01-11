@@ -49,9 +49,9 @@ class CancionSeeder extends Seeder
                 'archCancion' => 'Song_3.mp3',
                 'color' => '#efefef',
                 'anio' => '2022',
-                'IdGenero' => 3,
+                'IdGenero' => 1,
                 'IdAlbum' => 3,
-                'IdArtistas' => 3,
+                'IdArtistas' => 2,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ]
