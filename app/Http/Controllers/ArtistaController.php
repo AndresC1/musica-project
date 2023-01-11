@@ -86,6 +86,18 @@ class ArtistaController extends Controller
     {
         //
     }
+    public function ShowAPI(Artista $artista){
+        try {
+            $ObjArtista = new Artista();
+            $ObjArtista->id = $artista->id;
+            $ObjArtista->nombre = $artista->nombre;
+            $ObjArtista->imagen = $artista->imagen;
+            $ObjArtista->canciones = $this->LimData($artista->canciones);
+            return response($ObjArtista, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
+    }
     public function IndexAPI(){
         try {
             $artistas = array();
@@ -109,6 +121,7 @@ class ArtistaController extends Controller
             $temp = new stdClass;
             $temp->id = $elemento->id;
             $temp->nombre = $elemento->nombre;
+            $temp->imagen = $elemento->imagen;
             array_push($valores, $temp);
         }
         return $valores;
