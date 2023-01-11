@@ -86,13 +86,23 @@ class AlbumController extends Controller
     {
         //
     }
+    public function ShowAPI(Album $album){
+        try {
+            $ObjAlbum = new Album();
+            $ObjAlbum->id = $album->id;
+            $ObjAlbum->nombre = $album->nombre;
+            $ObjAlbum->imagen = $album->imagen;
+            $ObjAlbum->artista = $this->LimArtista($album->artista);
+            $ObjAlbum->canciones = $this->LimCanciones($album->canciones);
+            return response($ObjAlbum, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
+    }
     public function IndexAPI(){
         try {
             $albumes = array();
             foreach(Album::all() as $album){
-                foreach($album->canciones as $cancion){
-                    
-                }
                 $prueba = new stdClass;
                 $prueba->id = $album->id;
                 $prueba->nombre = $album->nombre;
