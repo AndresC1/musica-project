@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
+use App\Models\Cancion;
 use Exception;
 use stdClass;
 
@@ -93,11 +94,23 @@ class ArtistaController extends Controller
                 $artista->id = $element->id;
                 $artista->nombre = $element->nombre;
                 $artista->imagen = $element->imagen;
+                $artista->canciones = $this->LimData($element->canciones);
                 array_push($artistas, $artista);
             }
             return response($artistas, 200);
         } catch (Exception $e) {
             return response(['A ocurrido un error', $e->getMessage()], 400);
         }
+    }
+    function LimData($datos){
+        $valores = array();
+        Foreach($datos as $dato){
+            $elemento = Cancion::find($dato->IdCancion);
+            $temp = new stdClass;
+            $temp->id = $elemento->id;
+            $temp->nombre = $elemento->nombre;
+            array_push($valores, $temp);
+        }
+        return $valores;
     }
 }
