@@ -17,7 +17,11 @@ class GeneroController extends Controller
      */
     public function index()
     {
-        return view('Genero.lista')->with('Generos', Genero::all());
+        try {
+            return view('Genero.lista')->with('Generos', Genero::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -27,7 +31,11 @@ class GeneroController extends Controller
      */
     public function create()
     {
-        return view('Genero.create');
+        try {
+            return view('Genero.create');
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -38,8 +46,12 @@ class GeneroController extends Controller
      */
     public function store(StoreGeneroRequest $request)
     {
-        Genero::created($request->all());
-        return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
+        try {
+            Genero::created($request->all());
+            return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -50,7 +62,11 @@ class GeneroController extends Controller
      */
     public function show(Genero $genero)
     {
-        return view('Genero.show')->with('dato', $genero);
+        try {
+            return view('Genero.show')->with('dato', $genero);
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -61,7 +77,11 @@ class GeneroController extends Controller
      */
     public function edit(Genero $genero)
     {
-        return view('Genero.editar')->with('dato', $genero);
+        try {
+            return view('Genero.editar')->with('dato', $genero);
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -73,8 +93,12 @@ class GeneroController extends Controller
      */
     public function update(UpdateGeneroRequest $request, Genero $genero)
     {
-        $genero->update($request->all());
-        return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
+        try {
+            $genero->update($request->all());
+            return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -85,8 +109,12 @@ class GeneroController extends Controller
      */
     public function destroy(Genero $genero)
     {
-        $genero->delete();
-        return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
+        try {
+            $genero->delete();
+            return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
     public function ShowAPI(Genero $genero){
         try {
