@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ArtistaSeeder::class,
             AlbumSeeder::class,
             CancionSeeder::class,
+            cancion_artistaSeeders::class,
         ]);
     }
 }
