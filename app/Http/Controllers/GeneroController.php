@@ -85,7 +85,18 @@ class GeneroController extends Controller
     {
         //
     }
-
+    public function ShowAPI(Genero $genero){
+        try {
+            $ObjGenero = new Genero();
+            $ObjGenero->id = $genero->id;
+            $ObjGenero->nombre = $genero->nombre;
+            $ObjGenero->imagen = $genero->imagen;
+            $ObjGenero->canciones = $genero->canciones;
+            return response($ObjGenero, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
+    }
     public function IndexAPI(){
         try {
             $generos = array();
