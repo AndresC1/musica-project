@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src={{ asset('js/Tailwind_conf.js') }}></script>
+    <link rel="stylesheet" href={{ asset('css/style.css')}}>
     <title>Musica - ACL</title>
 </head>
 <body class="bg-white dark:bg-color_oscuro_1 dark:text-color-blanco_1 transition-all flex justify-start item-stretch">
@@ -21,6 +22,7 @@
             <a href="http://" class="w-full h-14 flex justify-center items-center hover:font-semibold transition-all dark:hover:text-white">Canciones</a>
             <a href="http://" class="w-full h-14 flex justify-center items-center hover:font-semibold transition-all dark:hover:text-white">Albumes</a>
             <a href="http://" class="w-full h-14 flex justify-center items-center hover:font-semibold transition-all dark:hover:text-white">Artistas</a>
+            <a href={{ route('ListGeneros') }} class="w-full h-14 flex justify-center items-center hover:font-semibold transition-all dark:hover:text-white">Generos</a>
         </ul>
     </nav>
     <div class="w-10/12 p-10 min-h-screen">
