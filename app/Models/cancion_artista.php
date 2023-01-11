@@ -9,12 +9,12 @@ class cancion_artista extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['IdCancion', 'IdArtista'];
+    protected $fillable = ['IdCancion', 'IdArtistas'];
 
     function canciones(){
         return $this->belongsToMany(Cancion::class, 'IdCancion');
     }
     function artistas(){
-        return $this->belongsToMany(Artista::class, 'IdArtista');
+        return $this->belongsToMany(Artista::class, 'IdArtistas');
     }
 }
