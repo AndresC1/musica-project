@@ -94,6 +94,7 @@ class GeneroController extends Controller
                 $genero->id = $element->id;
                 $genero->nombre = $element->nombre;
                 $genero->imagen = $element->imagen;
+                $genero->canciones = $element->canciones;
                 array_push($generos, $genero);
             }
             return response($generos, 200);
