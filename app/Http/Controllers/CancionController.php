@@ -86,6 +86,23 @@ class CancionController extends Controller
     {
         //
     }
+    public function ShowAPI(Cancion $cancion){
+        try {
+            $ObjCancion = new Cancion();
+            $ObjCancion->id = $cancion->id;
+            $ObjCancion->nombre = $cancion->nombre;
+            $ObjCancion->imagen = $cancion->imagen;
+            $ObjCancion->archCancion = $cancion->archCancion;
+            $ObjCancion->color = $cancion->color;
+            $ObjCancion->anio = $cancion->anio;
+            $ObjCancion->genero = $this->LimData($cancion->genero);
+            $ObjCancion->album = $this->LimData($cancion->album);
+            $ObjCancion->artistas = $this->MuestraArtistas($cancion->artistas);
+            return response($ObjCancion, 200);
+        } catch (Exception $e) {
+            return response(['A ocurrido un error', $e->getMessage()], 400);
+        }
+    }
     public function IndexAPI(){
         try {
             $canciones = array();
