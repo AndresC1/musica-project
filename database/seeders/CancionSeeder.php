@@ -50,7 +50,7 @@ class CancionSeeder extends Seeder
                 'color' => '#efefef',
                 'anio' => '2022',
                 'IdGenero' => 1,
-                'IdAlbum' => 3,
+                'IdAlbum' => 2,
                 'IdArtistas' => 2,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
