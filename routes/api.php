@@ -1,19 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\ArtistaController;
+use App\Http\Controllers\CancionController;
+use App\Http\Controllers\GeneroController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/v1/generos', [GeneroController::class, 'IndexAPI']);
+Route::get('/v1/canciones', [CancionController::class, 'IndexAPI']);
+Route::get('/v1/albumes', [AlbumController::class, 'IndexAPI']);
+Route::get('/v1/artistas', [ArtistaController::class, 'IndexAPI']);
