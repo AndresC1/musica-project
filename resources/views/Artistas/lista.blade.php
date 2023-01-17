@@ -10,4 +10,8 @@
             </a>
         @endforeach
     </div>
+    <button class="lg:w-auto lg:px-4 w-16 h-16 rounded-full fixed lg:bottom-14 bottom-5 right-5 lg:right-16 flex justify-center items-center hover:scale-110 bg-white">
+        <h1 class="lg:block hidden">Agregar artista</h1>
+        <img src={{asset('storage/svg/add.svg')}} class="w-7 h-auto lg:ml-2" alt="">
+    </button>
 @endsection
