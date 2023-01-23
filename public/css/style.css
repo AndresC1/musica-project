@@ -7,3 +7,12 @@
 #contenedor::-webkit-scrollbar-thumb{
     background-color: transparent;
 }
+body::-webkit-scrollbar{
+    width: 0.5rem;
+}
+body::-webkit-scrollbar-track{
+    background-color: #555;
+}
+body::-webkit-scrollbar-thumb{
+    background-color: #eee;
+}
