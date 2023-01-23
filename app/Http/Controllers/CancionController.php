@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Cancion;
 use App\Http\Requests\StoreCancionRequest;
 use App\Http\Requests\UpdateCancionRequest;
+use App\Models\Album;
 use App\Models\Artista;
+use App\Models\cancion_artista;
+use App\Models\Genero;
 use Exception;
 use stdClass;
 
@@ -18,7 +21,11 @@ class CancionController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return view('Canciones.lista')->with('Canciones', Cancion::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -28,7 +35,11 @@ class CancionController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            return view('Canciones.create')->with('Generos', Genero::all())->with('Albumes', Album::all())->with('Artistas', Artista::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error '.$e->getMessage());
+        }
     }
 
     /**
@@ -39,7 +50,34 @@ class CancionController extends Controller
      */
     public function store(StoreCancionRequest $request)
     {
-        //
+        try {
+            if($_FILES['archCancion']['type'] == 'audio/mpeg'){
+                $limpNombre = str_replace(' ', '', $request['nombre']);
+                $DatAlbum = Album::find($request['IdAlbum']);
+                $newDat = new Cancion();
+                $newDat->nombre = $request['nombre'];
+                $newDat->archCancion = $limpNombre.'.mp3';
+                $newDat->color = $request['color'];
+                $newDat->anio = $request['anio'];
+                $newDat->imagen = $DatAlbum->imagen;
+                $newDat->IdGenero = $request['IdGenero'];
+                $newDat->IdAlbum = $request['IdAlbum'];
+                $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/Audio/';
+                move_uploaded_file($_FILES['archCancion']['tmp_name'],$carpeta_destino.$limpNombre.'.mp3');
+                $newDat->save();
+                $TempID = $TempID = Cancion::where('nombre', $request['nombre'])->get();
+                foreach($request['Artistas'] as $artista){
+                    $registro = new cancion_artista();
+                    $registro->IdCancion = $TempID[0]->id;
+                    $registro->IdArtistas = $artista;
+                    $registro->save();
+                }
+                return view('Mensaje.info')->with('informacion', 'La cancion fue almacenado con exito');
+            }
+            return view('Mensaje.info')->with('informacion', 'archivo de musica no correcto');
+        } catch (Exception $e) {
+            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+        }
     }
 
     /**
