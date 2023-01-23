@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src={{ asset('js/Tailwind_conf.js') }}></script>
+    <link rel="stylesheet" href={{ asset('css/multiSelect.css') }}>
     <title>Musica - ACL</title>
 </head>
 <body class="bg-color_oscuro_1 text-color_blanco_1 flex justify-center items-center">
