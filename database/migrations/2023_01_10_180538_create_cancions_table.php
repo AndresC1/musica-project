@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->string('anio', 4)->nullable();
             $table->foreignId('IdGenero')->constrained('generos')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('IdArtistas')->constrained('artistas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('IdAlbum')->constrained('albums')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
