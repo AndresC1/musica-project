@@ -7,8 +7,8 @@ use App\Http\Controllers\GeneroController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('Template.main');
-});
+    return redirect('/canciones');
+})->name('inicio');
 
 Route::get('/albumes', [AlbumController::class, 'index'])->name('ListAlbumes');
 Route::get('/albumes/create', [AlbumController::class, 'create'])->name('CreateAlbum');
