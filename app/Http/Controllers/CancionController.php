@@ -74,9 +74,9 @@ class CancionController extends Controller
                 }
                 return view('Mensaje.info')->with('informacion', 'La cancion fue almacenado con exito');
             }
-            return view('Mensaje.info')->with('informacion', 'archivo de musica no correcto');
+            return view('Mensaje.error')->with('informacion', 'archivo de musica no correcto');
         } catch (Exception $e) {
-            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
         }
     }
 
