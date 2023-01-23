@@ -9,7 +9,7 @@ class Cancion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre', 'imagen', 'archCancion', 'color', 'anio', 'IdGenero', 'IdAlbum', 'IdArtistas'];
+    protected $fillable = ['nombre', 'imagen', 'archCancion', 'color', 'anio', 'IdGenero', 'IdAlbum'];
 
     function genero(){
         return $this->belongsTo(Genero::class, 'IdGenero');
