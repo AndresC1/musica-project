@@ -18,7 +18,11 @@ class ArtistaController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return view('Artistas.lista')->with('Artistas', Artista::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -28,7 +32,11 @@ class ArtistaController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            return view('Artistas.create');
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -39,7 +47,22 @@ class ArtistaController extends Controller
      */
     public function store(StoreArtistaRequest $request)
     {
-        //
+        try {
+            $TMP_imagen = $_FILES['imagen'];
+            if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
+                $limpNombre = str_replace(' ', '', $request['nombre']);
+                $newDat = new Artista();
+                $newDat->nombre = $request['nombre'];
+                $newDat->imagen = $limpNombre.'.jpg';
+                $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Artistas/';
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
+                $newDat->save();
+                return view('Mensaje.info')->with('informacion', 'El artista fue almacenado con exito');
+            }
+            return view('Mensaje.info')->with('informacion', 'imagen no correcta');
+        } catch (Exception $e) {
+            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+        }
     }
 
     /**
