@@ -16,5 +16,3 @@
             Ir al inicio</a>
     </div>
 @endsection
-    {{-- <h1 class="text-white"></h1> --}}
-    {{-- <img class="h-auto w-7 text-green-400 mr-3" src={{asset('storage/svg/check.svg')}} alt="check"> --}}
