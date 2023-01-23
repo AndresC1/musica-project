@@ -58,9 +58,9 @@ class GeneroController extends Controller
                 $newDat->save();
                 return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
             }
-            return view('Mensaje.info')->with('informacion', 'imagen no correcta');
+            return view('Mensaje.error')->with('informacion', 'imagen no correcta');
         } catch (Exception $e) {
-            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
         }
     }
 
@@ -72,11 +72,7 @@ class GeneroController extends Controller
      */
     public function show(Genero $genero)
     {
-        try {
-            return view('Genero.show')->with('dato', $genero);
-        } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
-        }
+        //
     }
 
     /**
@@ -87,11 +83,7 @@ class GeneroController extends Controller
      */
     public function edit(Genero $genero)
     {
-        try {
-            return view('Genero.editar')->with('dato', $genero);
-        } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
-        }
+        //
     }
 
     /**
@@ -103,12 +95,7 @@ class GeneroController extends Controller
      */
     public function update(UpdateGeneroRequest $request, Genero $genero)
     {
-        try {
-            $genero->update($request->all());
-            return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
-        } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
-        }
+        //
     }
 
     /**
@@ -119,12 +106,7 @@ class GeneroController extends Controller
      */
     public function destroy(Genero $genero)
     {
-        try {
-            $genero->delete();
-            return view('Mensaje.info')->with('informacion', 'El genero fue actualizado con exito');
-        } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
-        }
+        //
     }
     public function ShowAPI(Genero $genero){
         try {
