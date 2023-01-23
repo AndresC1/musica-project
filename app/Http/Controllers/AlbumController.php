@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
-use App\Models\Cancion;
+use App\Models\Artista;
 use Exception;
 use stdClass;
 
@@ -18,7 +18,11 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return view('Album.lista')->with('Albumes', Album::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -28,7 +32,11 @@ class AlbumController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            return view('Album.create')->with('Artistas', Artista::all());
+        } catch (Exception $e) {
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+        }
     }
 
     /**
@@ -39,7 +47,23 @@ class AlbumController extends Controller
      */
     public function store(StoreAlbumRequest $request)
     {
-        //
+        try {
+            $TMP_imagen = $_FILES['imagen'];
+            if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
+                $limpNombre = str_replace(' ', '', $request['nombre']);
+                $newDat = new Album();
+                $newDat->nombre = $request['nombre'];
+                $newDat->imagen = $limpNombre.'.jpg';
+                $newDat->IdArtista = $request['artista'];
+                $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Albumes/';
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
+                $newDat->save();
+                return view('Mensaje.info')->with('informacion', 'El Album fue almacenado con exito');
+            }
+            return view('Mensaje.info')->with('informacion', 'imagen no correcta');
+        } catch (Exception $e) {
+            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+        }
     }
 
     /**
