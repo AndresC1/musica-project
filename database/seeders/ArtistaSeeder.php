@@ -20,20 +20,20 @@ class ArtistaSeeder extends Seeder
         DB::table('artistas')->truncate();
         DB::table('artistas')->insert([
             [
-                'nombre' => 'Artist_1',
-                'imagen' => 'Artist_1.jpg',
+                'nombre' => 'Bad Bunny',
+                'imagen' => 'BadBunny.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Artist_2',
-                'imagen' => 'Artist_2.jpg',
+                'nombre' => 'Daddy Yankee',
+                'imagen' => 'DaddyYankee.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Artist_3',
-                'imagen' => 'Artist_3.jpg',
+                'nombre' => 'Zion & Lennox',
+                'imagen' => 'ZionLennox.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ]
