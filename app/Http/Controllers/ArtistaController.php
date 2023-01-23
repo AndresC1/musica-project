@@ -59,9 +59,9 @@ class ArtistaController extends Controller
                 $newDat->save();
                 return view('Mensaje.info')->with('informacion', 'El artista fue almacenado con exito');
             }
-            return view('Mensaje.info')->with('informacion', 'imagen no correcta');
+            return view('Mensaje.error')->with('informacion', 'imagen no correcta');
         } catch (Exception $e) {
-            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
         }
     }
 
