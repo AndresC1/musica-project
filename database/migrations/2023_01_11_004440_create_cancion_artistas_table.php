@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('IdCancion')->constrained('cancions')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('IdArtistas')->constrained('artistas')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->timestamps();
         });
     }
 
