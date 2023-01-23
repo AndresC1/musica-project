@@ -47,10 +47,20 @@ class GeneroController extends Controller
     public function store(StoreGeneroRequest $request)
     {
         try {
-            Genero::created($request->all());
-            return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
+            $TMP_imagen = $_FILES['imagen'];
+            if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
+                $limpNombre = str_replace(' ', '', $request['nombre']);
+                $newDat = new Genero();
+                $newDat->nombre = $request['nombre'];
+                $newDat->imagen = $limpNombre.'.jpg';
+                $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Generos/';
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
+                $newDat->save();
+                return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
+            }
+            return view('Mensaje.info')->with('informacion', 'imagen no correcta');
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.info')->with('informacion', 'Ocurrio un error'.$e->getMessage());
         }
     }
 
