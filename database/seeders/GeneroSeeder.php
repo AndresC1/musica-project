@@ -32,59 +32,53 @@ class GeneroSeeder extends Seeder
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Clasica',
-                'imagen' => 'Clasica.jpg',
+                'nombre' => 'Bachata',
+                'imagen' => 'Bachata.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Regueton',
-                'imagen' => 'Pop.jpg',
+                'nombre' => 'Reggaeton',
+                'imagen' => 'Reggaeton.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
                 'nombre' => 'Salsa',
-                'imagen' => 'Clasica.jpg',
+                'imagen' => 'Salsa.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
-                'nombre' => 'Bachata',
-                'imagen' => 'Clasica.jpg',
+                'nombre' => 'Banda',
+                'imagen' => 'Banda.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
                 'nombre' => 'Merengue',
-                'imagen' => 'Clasica.jpg',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-            ],
-            [
-                'nombre' => 'RAP',
-                'imagen' => 'Rock.jpg',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-            ],
-            [
-                'nombre' => 'Tropical',
-                'imagen' => 'Pop.jpg',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-            ],
-            [
-                'nombre' => 'Electronica',
-                'imagen' => 'Pop.jpg',
+                'imagen' => 'Merengue.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
             [
                 'nombre' => 'Cumbia',
-                'imagen' => 'Pop.jpg',
+                'imagen' => 'Cumbia.jpg',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ],
+            [
+                'nombre' => 'Disco',
+                'imagen' => 'Disco.jpg',
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
+            ],
+            [
+                'nombre' => 'Electronica',
+                'imagen' => 'Electronica.jpg',
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
+            ]
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

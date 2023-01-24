@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             GeneroSeeder::class,
-            ArtistaSeeder::class,
-            AlbumSeeder::class,
-            CancionSeeder::class,
-            cancion_artistaSeeders::class,
+            // ArtistaSeeder::class,
+            // AlbumSeeder::class,
+            // CancionSeeder::class,
+            // cancion_artistaSeeders::class,
         ]);
     }
 }
