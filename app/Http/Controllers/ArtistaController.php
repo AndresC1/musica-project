@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
-use App\Models\Cancion;
+use App\Http\Resources\ArtistaResource;
 use Exception;
-use stdClass;
 
 class ArtistaController extends Controller
 {
@@ -19,9 +18,9 @@ class ArtistaController extends Controller
     public function index()
     {
         try {
-            return view('Artistas.lista')->with('Artistas', Artista::all());
+            return view('Artistas.lista', ['Artistas' => ArtistaResource::collection(Artista::all())]);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -35,7 +34,7 @@ class ArtistaController extends Controller
         try {
             return view('Artistas.create');
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -51,17 +50,17 @@ class ArtistaController extends Controller
             $TMP_imagen = $_FILES['imagen'];
             if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
                 $limpNombre = str_replace(' ', '', $request['nombre']);
-                $newDat = new Artista();
-                $newDat->nombre = $request['nombre'];
-                $newDat->imagen = $limpNombre.'.jpg';
+                $dataArtista = new StoreArtistaRequest();
+                $dataArtista["nombre"] = $request['nombre'];
+                $dataArtista["imagen"] = $limpNombre.'.jpg';
                 $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Artistas/';
                 move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
-                $newDat->save();
+                Artista::create($dataArtista->all());
                 return view('Mensaje.info')->with('informacion', 'El artista fue almacenado con exito');
             }
             return view('Mensaje.error')->with('informacion', 'imagen no correcta');
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -111,42 +110,32 @@ class ArtistaController extends Controller
     }
     public function ShowAPI(Artista $artista){
         try {
-            $ObjArtista = new Artista();
-            $ObjArtista->id = $artista->id;
-            $ObjArtista->nombre = $artista->nombre;
-            $ObjArtista->imagen = $artista->imagen;
-            $ObjArtista->canciones = $this->LimData($artista->canciones);
-            return response($ObjArtista, 200);
+            return response([
+                'artista' => ArtistaResource::make($artista),
+                'message' => 'Artista encontrado',
+                'status' => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
     }
     public function IndexAPI(){
         try {
-            $artistas = array();
-            Foreach(Artista::all() as $element){
-                $artista = new stdClass;
-                $artista->id = $element->id;
-                $artista->nombre = $element->nombre;
-                $artista->imagen = $element->imagen;
-                $artista->canciones = $this->LimData($element->canciones);
-                array_push($artistas, $artista);
-            }
-            return response($artistas, 200);
+            return response([
+                'artistas' => ArtistaResource::collection(Artista::all()),
+                'message' => 'Lista de Artistas',
+                'status' => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
-    }
-    function LimData($datos){
-        $valores = array();
-        Foreach($datos as $dato){
-            $elemento = Cancion::find($dato->IdCancion);
-            $temp = new stdClass;
-            $temp->id = $elemento->id;
-            $temp->nombre = $elemento->nombre;
-            $temp->imagen = $elemento->imagen;
-            array_push($valores, $temp);
-        }
-        return $valores;
     }
 }
