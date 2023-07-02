@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Genero;
 use App\Http\Requests\StoreGeneroRequest;
 use App\Http\Requests\UpdateGeneroRequest;
+use App\Http\Resources\GeneroResource;
 use Exception;
-use stdClass;
 
 class GeneroController extends Controller
 {
@@ -18,9 +18,9 @@ class GeneroController extends Controller
     public function index()
     {
         try {
-            return view('Genero.lista')->with('Generos', Genero::all());
+            return view('Genero.lista', ['Generos' => GeneroResource::collection(Genero::all())]);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -34,7 +34,7 @@ class GeneroController extends Controller
         try {
             return view('Genero.create');
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -50,17 +50,17 @@ class GeneroController extends Controller
             $TMP_imagen = $_FILES['imagen'];
             if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
                 $limpNombre = str_replace(' ', '', $request['nombre']);
-                $newDat = new Genero();
-                $newDat->nombre = $request['nombre'];
-                $newDat->imagen = $limpNombre.'.jpg';
+                $dataRequest = new StoreGeneroRequest();
+                $dataRequest["nombre"] = $request['nombre'];
+                $dataRequest["imagen"] = $limpNombre.'.jpg';
+                Genero::create($dataRequest->all());
                 $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Generos/';
                 move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
-                $newDat->save();
-                return view('Mensaje.info')->with('informacion', 'El genero fue almacenado con exito');
+                return view('Mensaje.info', ['informacion' => 'El genero fue almacenado con exito']);
             }
-            return view('Mensaje.error')->with('informacion', 'imagen no correcta');
+            return view('Mensaje.error', ['informacion' => 'Formato de imagen no correcto']);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error: '.$e->getMessage()]);
         }
     }
 
@@ -110,30 +110,32 @@ class GeneroController extends Controller
     }
     public function ShowAPI(Genero $genero){
         try {
-            $ObjGenero = new Genero();
-            $ObjGenero->id = $genero->id;
-            $ObjGenero->nombre = $genero->nombre;
-            $ObjGenero->imagen = $genero->imagen;
-            $ObjGenero->canciones = $genero->canciones;
-            return response($ObjGenero, 200);
+            return response([
+                "genero" => GeneroResource::make($genero),
+                "message" => "Genero encontrado",
+                "status" => 200
+                ] , 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
     }
     public function IndexAPI(){
         try {
-            $generos = array();
-            Foreach(Genero::all() as $element){
-                $genero = new stdClass;
-                $genero->id = $element->id;
-                $genero->nombre = $element->nombre;
-                $genero->imagen = $element->imagen;
-                $genero->canciones = $element->canciones;
-                array_push($generos, $genero);
-            }
-            return response($generos, 200);
+            return response([
+                "generos" => GeneroResource::collection(Genero::all()),
+                "message" => "Lista de generos",
+                "status" => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
     }
 }
