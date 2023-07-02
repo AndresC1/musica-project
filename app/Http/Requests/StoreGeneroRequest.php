@@ -24,7 +24,8 @@ class StoreGeneroRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nombre' => 'required|string|max:255',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }
