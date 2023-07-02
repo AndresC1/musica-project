@@ -24,7 +24,8 @@ class StoreArtistaRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nombre" => "required|string|max:100",
+            "imagen" => "required|image|mimes:jpeg,jpg|max:1024",
         ];
     }
 }
