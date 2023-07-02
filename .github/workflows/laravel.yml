@@ -45,6 +45,8 @@ jobs:
         DB_USER: root
         DB_PASSWORD: test
         MYSQL_ROOT_PASSWORD: test
+        MYSQL_ALLOW_EMPTY_PASSWORD: true
+        MYSQL_RANDOM_ROOT_PASSWORD: true
       run: |
         php artisan migrate
         vendor/phpunit/phpunit/phpunit
