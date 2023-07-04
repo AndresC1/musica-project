@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
-use App\Http\Resources\ArtistaResource;
+use App\Http\Resources\Artista\ArtistaInfoResource;
+use App\Http\Resources\Artista\ArtistaResource;
 use Exception;
 
 class ArtistaController extends Controller
@@ -18,7 +19,7 @@ class ArtistaController extends Controller
     public function index()
     {
         try {
-            return view('Artistas.lista', ['Artistas' => ArtistaResource::collection(Artista::all())]);
+            return view('Artistas.lista', ['Artistas' => ArtistaInfoResource::collection(Artista::all())]);
         } catch (Exception $e) {
             return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
@@ -56,9 +57,9 @@ class ArtistaController extends Controller
                 $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Artistas/';
                 move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
                 Artista::create($dataArtista->all());
-                return view('Mensaje.info')->with('informacion', 'El artista fue almacenado con exito');
+                return view('Mensaje.info', ['informacion' => 'El artista fue almacenado con exito']);
             }
-            return view('Mensaje.error')->with('informacion', 'imagen no correcta');
+            return view('Mensaje.error', ['informacion' => 'Formato de imagen no correcto']);
         } catch (Exception $e) {
             return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
