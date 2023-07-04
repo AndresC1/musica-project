@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Genero;
 use App\Http\Requests\StoreGeneroRequest;
 use App\Http\Requests\UpdateGeneroRequest;
-use App\Http\Resources\GeneroResource;
+use App\Http\Resources\Genero\GeneroInfoResource;
+use App\Http\Resources\Genero\GeneroResource;
 use Exception;
 
 class GeneroController extends Controller
@@ -18,7 +19,7 @@ class GeneroController extends Controller
     public function index()
     {
         try {
-            return view('Genero.lista', ['Generos' => GeneroResource::collection(Genero::all())]);
+            return view('Genero.lista', ['Generos' => GeneroInfoResource::collection(Genero::all())]);
         } catch (Exception $e) {
             return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
@@ -110,11 +111,18 @@ class GeneroController extends Controller
     }
     public function ShowAPI(Genero $genero){
         try {
-            return response([
-                "genero" => GeneroResource::make($genero),
-                "message" => "Genero encontrado",
-                "status" => 200
+            if(Genero::where('id', $genero->id)->exists()){
+                return response([
+                    "genero" => GeneroResource::make($genero),
+                    "message" => "Genero encontrado",
+                    "status" => 200
                 ] , 200);
+            } else{
+                return response([
+                    "message" => "Genero no encontrado",
+                    "status" => 404
+                ], 404);
+            }
         } catch (Exception $e) {
             return response([
                 "error" => $e->getMessage(),
