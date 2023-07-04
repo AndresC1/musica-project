@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Cancion;
 use App\Http\Requests\StoreCancionRequest;
 use App\Http\Requests\UpdateCancionRequest;
+use App\Http\Resources\Album\AlbumInfoResource;
+use App\Http\Resources\Artista\ArtistaInfoResource;
+use App\Http\Resources\Cancion\CancionResource;
+use App\Http\Resources\Genero\GeneroInfoResource;
 use App\Models\Album;
 use App\Models\Artista;
 use App\Models\cancion_artista;
@@ -24,7 +28,7 @@ class CancionController extends Controller
         try {
             return view('Canciones.lista')->with('Canciones', Cancion::all());
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -36,9 +40,13 @@ class CancionController extends Controller
     public function create()
     {
         try {
-            return view('Canciones.create')->with('Generos', Genero::all())->with('Albumes', Album::all())->with('Artistas', Artista::all());
+            return view('Canciones.create', [
+                'Generos' => GeneroInfoResource::collection(Genero::all()),
+                'Albumes' => AlbumInfoResource::collection(Album::all()),
+                'Artistas' => ArtistaInfoResource::collection(Artista::all()),
+            ]);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error '.$e->getMessage());
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -54,17 +62,17 @@ class CancionController extends Controller
             if($_FILES['archCancion']['type'] == 'audio/mpeg'){
                 $limpNombre = str_replace(' ', '', $request['nombre']);
                 $DatAlbum = Album::find($request['IdAlbum']);
-                $newDat = new Cancion();
-                $newDat->nombre = $request['nombre'];
-                $newDat->archCancion = $limpNombre.'.mp3';
-                $newDat->color = $request['color'];
-                $newDat->anio = $request['anio'];
-                $newDat->imagen = $DatAlbum->imagen;
-                $newDat->IdGenero = $request['IdGenero'];
-                $newDat->IdAlbum = $request['IdAlbum'];
+                $dataCancion = new StoreCancionRequest();
+                $dataCancion["nombre"] = $request['nombre'];
+                $dataCancion["archCancion"] = $limpNombre.'.mp3';
+                $dataCancion["color"] = $request['color'];
+                $dataCancion["anio"] = $request['anio'];
+                $dataCancion["imagen"] = $DatAlbum->imagen;
+                $dataCancion["IdGenero"] = $request['IdGenero'];
+                $dataCancion["IdAlbum"] = $request['IdAlbum'];
                 $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/Audio/';
                 move_uploaded_file($_FILES['archCancion']['tmp_name'],$carpeta_destino.$limpNombre.'.mp3');
-                $newDat->save();
+                Cancion::create($dataCancion->all());
                 $TempID = $TempID = Cancion::where('nombre', $request['nombre'])->get();
                 foreach($request['Artistas'] as $artista){
                     $registro = new cancion_artista();
@@ -72,11 +80,11 @@ class CancionController extends Controller
                     $registro->IdArtistas = $artista;
                     $registro->save();
                 }
-                return view('Mensaje.info')->with('informacion', 'La cancion fue almacenado con exito');
+                return view('Mensaje.info', ['informacion' => 'Cancion agregada correctamente']);
             }
-            return view('Mensaje.error')->with('informacion', 'archivo de musica no correcto');
+            return view('Mensaje.error', ['informacion' => 'El archivo no es un mp3']);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -126,58 +134,32 @@ class CancionController extends Controller
     }
     public function ShowAPI(Cancion $cancion){
         try {
-            $ObjCancion = new Cancion();
-            $ObjCancion->id = $cancion->id;
-            $ObjCancion->nombre = $cancion->nombre;
-            $ObjCancion->imagen = $cancion->imagen;
-            $ObjCancion->archCancion = $cancion->archCancion;
-            $ObjCancion->color = $cancion->color;
-            $ObjCancion->anio = $cancion->anio;
-            $ObjCancion->genero = $this->LimData($cancion->genero);
-            $ObjCancion->album = $this->LimData($cancion->album);
-            $ObjCancion->artistas = $this->MuestraArtistas($cancion->artistas);
-            return response($ObjCancion, 200);
+            return response([
+                'cancion' => new CancionResource($cancion),
+                "message" => "Cancion encontrada",
+                "status" => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
     }
     public function IndexAPI(){
         try {
-            $canciones = array();
-            foreach(Cancion::all() as $cancion){
-                $ObjCancion = new stdClass;
-                $ObjCancion->id = $cancion->id;
-                $ObjCancion->nombre = $cancion->nombre;
-                $ObjCancion->imagen = $cancion->imagen;
-                $ObjCancion->archCancion = $cancion->archCancion;
-                $ObjCancion->color = $cancion->color;
-                $ObjCancion->anio = $cancion->anio;
-                $ObjCancion->genero = $this->LimData($cancion->genero);
-                $ObjCancion->album = $this->LimData($cancion->album);
-                $ObjCancion->artistas = $this->MuestraArtistas($cancion->artistas);
-                array_push($canciones, $ObjCancion);
-            }
-            return response($canciones, 200);
+            return response([
+                'canciones' => CancionResource::collection(Cancion::all()),
+                "message" => "Lista de canciones",
+                "status" => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
-    }
-    function LimData($ListaDatos){
-        $element = new stdClass;
-        $element->id = $ListaDatos->id;
-        $element->nombre = $ListaDatos->nombre;
-        $element->imagen = $ListaDatos->imagen;
-        return $element;
-    }
-    function MuestraArtistas($datos){
-        $salida = array();
-        Foreach($datos as $dat){
-            $valores = Artista::find($dat->IdArtistas);
-            $val = new stdClass;
-            $val->nombre = $valores->nombre;
-            $val->imagen = $valores->imagen;
-            array_push($salida, $val);
-        }
-        return $salida;
     }
 }
