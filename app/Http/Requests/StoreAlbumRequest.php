@@ -24,7 +24,9 @@ class StoreAlbumRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nombre" => "required|string|max:100",
+            "imagen" => "required|image|mimes:jpeg,jpg|max:1024",
+            "artista" => "required|integer|exists:artistas,id",
         ];
     }
 }

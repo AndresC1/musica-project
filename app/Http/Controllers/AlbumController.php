@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
+use App\Http\Resources\Album\AlbumResource;
+use App\Http\Resources\Album\AlbumInfoResource;
+use App\Http\Resources\Artista\ArtistaInfoResource;
 use App\Models\Artista;
 use Exception;
-use stdClass;
 
 class AlbumController extends Controller
 {
@@ -19,9 +21,9 @@ class AlbumController extends Controller
     public function index()
     {
         try {
-            return view('Album.lista')->with('Albumes', Album::all());
+            return view('Album.lista', ['Albumes' => AlbumInfoResource::collection(Album::all())]);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -33,9 +35,9 @@ class AlbumController extends Controller
     public function create()
     {
         try {
-            return view('Album.create')->with('Artistas', Artista::all());
+            return view('Album.create', ['Artistas' => ArtistaInfoResource::collection(Artista::all())]);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error');
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -51,18 +53,18 @@ class AlbumController extends Controller
             $TMP_imagen = $_FILES['imagen'];
             if($TMP_imagen['type'] == 'image/jpeg' || $TMP_imagen['type'] == 'image/jpg'){
                 $limpNombre = str_replace(' ', '', $request['nombre']);
-                $newDat = new Album();
-                $newDat->nombre = $request['nombre'];
-                $newDat->imagen = $limpNombre.'.jpg';
-                $newDat->IdArtista = $request['artista'];
+                $albumData = new StoreAlbumRequest();
+                $albumData["nombre"] = $request['nombre'];
+                $albumData["imagen"] = $limpNombre.'.jpg';
+                $albumData["IdArtista"] = $request['artista'];
                 $carpeta_destino = $_SERVER['DOCUMENT_ROOT'] . '/storage/img/Albumes/';
                 move_uploaded_file($_FILES['imagen']['tmp_name'],$carpeta_destino.$limpNombre.'.jpg');
-                $newDat->save();
+                Album::create($albumData->all());
                 return view('Mensaje.info')->with('informacion', 'El Album fue almacenado con exito');
             }
-            return view('Mensaje.error')->with('informacion', 'imagen no correcta');
+            return view('Mensaje.error', ['informacion' => 'Formato de imagen no correcto']);
         } catch (Exception $e) {
-            return view('Mensaje.error')->with('informacion', 'Ocurrio un error'.$e->getMessage());
+            return view('Mensaje.error', ['informacion' => 'Ocurrio un error:'.$e->getMessage()]);
         }
     }
 
@@ -112,50 +114,39 @@ class AlbumController extends Controller
     }
     public function ShowAPI(Album $album){
         try {
-            $ObjAlbum = new Album();
-            $ObjAlbum->id = $album->id;
-            $ObjAlbum->nombre = $album->nombre;
-            $ObjAlbum->imagen = $album->imagen;
-            $ObjAlbum->artista = $this->LimArtista($album->artista);
-            $ObjAlbum->canciones = $this->LimCanciones($album->canciones);
-            return response($ObjAlbum, 200);
+            if(Album::where('id', $album->id)->exists()){
+                return response([
+                    "album" => AlbumResource::make($album),
+                    "message" => 'Album encontrado',
+                    "status" => 200
+                ], 200);
+            } else{
+                return response([
+                    "message" => 'Album no encontrado',
+                    "status" => 404
+                ], 404);
+            }
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
     }
     public function IndexAPI(){
         try {
-            $albumes = array();
-            foreach(Album::all() as $album){
-                $prueba = new stdClass;
-                $prueba->id = $album->id;
-                $prueba->nombre = $album->nombre;
-                $prueba->imagen = $album->imagen;
-                $prueba->artista = $this->LimArtista($album->artista);
-                $prueba->canciones = $this->LimCanciones($album->canciones);
-                array_push($albumes, $prueba);
-            }
-            return response($albumes, 200);
+            return response([
+                "albumes" => AlbumResource::collection(Album::all()),
+                "message" => 'Lista de albumes',
+                "status" => 200
+            ], 200);
         } catch (Exception $e) {
-            return response(['A ocurrido un error', $e->getMessage()], 400);
+            return response([
+                "error" => $e->getMessage(),
+                "message" => 'A ocurrido un error',
+                "status" => 400
+            ], 400);
         }
-    }
-    function LimCanciones($ListCanciones){
-        $canciones = array();
-        foreach($ListCanciones as $DatosCancion){
-            $cancion = new stdClass;
-            $cancion->id = $DatosCancion->id;
-            $cancion->nombre = $DatosCancion->nombre;
-            $cancion->imagen = $DatosCancion->imagen;
-            array_push($canciones, $cancion);
-        }
-        return $canciones;
-    }
-    function LimArtista($ListArtista){
-        $datos = new stdClass;
-        $datos->id = $ListArtista->id;
-        $datos->nombre = $ListArtista->nombre;
-        $datos->artista = $ListArtista->imagen;
-        return $datos;
     }
 }
