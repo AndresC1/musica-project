@@ -18,4 +18,8 @@ class Artista extends Model
     function canciones(){
         return $this->hasMany(cancion_artista::class, 'IdArtistas');
     }
+
+    function favoritos(){
+        return $this->morphMany(Favorito::class, 'favoritable');
+    }
 }
