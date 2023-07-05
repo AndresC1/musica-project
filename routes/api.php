@@ -5,6 +5,7 @@ use App\Http\Controllers\ArtistaController;
 use App\Http\Controllers\CancionController;
 use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FavoritoController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -26,4 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Artista
     Route::get('/artistas', [ArtistaController::class, 'IndexAPI']);
     Route::get('/artista/{artista}', [ArtistaController::class, 'ShowAPI']);
+    // Favoritos
+    Route::apiResource('/favoritos', FavoritoController::class)->only(['index', 'store', 'show', 'destroy']);
+    Route::get('/favoritos/{type}/index', [FavoritoController::class, 'indexByType']);
 });

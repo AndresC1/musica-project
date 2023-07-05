@@ -19,4 +19,7 @@ class Album extends Model
         return $this->hasMany(Cancion::class, 'IdAlbum');
     }
 
+    function favoritos(){
+        return $this->morphMany(Favorito::class, 'favoritable');
+    }
 }
